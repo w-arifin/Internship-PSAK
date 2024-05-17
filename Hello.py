@@ -22,28 +22,67 @@ from nltk import bigrams
 from wordcloud import WordCloud
 from textblob import TextBlob
 
-from streamlit.logger import get_logger
 
-LOGGER = get_logger(__name__)
+st.set_page_config(
+        page_title="Hello",
+        page_icon="👋",)
 
+st.title("Prototype Dashboard PSAK")
+st.write("Data Preparation of PSAK || TETRIS BATCH 4 Internship in Xeratic - Group 19")
 
-st.write("# Welcome to Streamlit! 👋")
+df = pd.read_excel('https://github.com/w-arifin/Internship-PSAK/raw/main/Mockup%20Group%2019%20Xeratic.xlsx')
+df = df.rename(columns={'No PSAK' : 'no_psak',
+                               'Nama PSAK' : 'nama_psak',
+                               'Tgl Terbit' : 'tgl_terbit',
+                               'Tgl Disahkan' : 'tgl_sah',
+                               'Konten' : 'konten',
+                               'File Konten' : 'file_konten',
+                               'Kategori' : 'kategori',
+                               'Jumlah Sub Konten' : 'jumlah_sub_konten'})
 
-tab1, tab2 = st.tabs(["home", "PR"])
+option_list = df['no_psak'].unique()
 
-st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """)
+df['tgl_terbit'] = pd.to_datetime(df['tgl_terbit'])
+df['tgl_sah'] = pd.to_datetime(df['tgl_sah'])
+
+# Mengubah format tanggal menjadi '15 Desember 2009'
+def format_date(date):
+    months = {
+        1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April',
+        5: 'Mei', 6: 'Juni', 7: 'Juli', 8: 'Agustus',
+        9: 'September', 10: 'Oktober', 11: 'November', 12: 'Desember'
+    }
+    return f"{date.day} {months[date.month]} {date.year}"
+
+df['tgl_terbit'] = df['tgl_terbit'].apply(format_date)
+df['tgl_sah'] = df['tgl_sah'].apply(format_date)
+
+st.divider()
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+  option = st.selectbox(
+    "Pilih PSAK yang ingin dilihat:",
+    (option_list))
+
+selected_psak_data = df[df['no_psak'] == option]
+
+st.subheader(f"{option} - {selected_psak_data['nama_psak'].values[0]}")
+st.write(f"**Kategori** : *{selected_psak_data['kategori'].values[0]}*")
+
+col1, col2 = st.columns(2)
+
+with col1:
+   st.write("Tanggal Terbit:", selected_psak_data['tgl_terbit'].values[0])
+
+with col2:
+   st.write(f"Tanggal Disahkan: {selected_psak_data['tgl_sah'].values[0]}")
+
+container = st.container(border=True)
+container.write(selected_psak_data['konten'].values[0])
+
+with st.expander("File konten:"):
+    st.write(f"{selected_psak_data['file_konten'].values[0]}")
+       
+st.write(f"Jumlah Sub Konten: {selected_psak_data['jumlah_sub_konten'].values[0]}")
