@@ -69,7 +69,7 @@ with col1:
 selected_psak_data = df[df['no_psak'] == option]
 
 with col2:
-   st.metric(label="Total Jumlah Sub Konten:", value=selected_psak_data['jumlah_sub_konten'].values[0],
+   st.metric(label="Jumlah Sub Konten:", value=selected_psak_data['jumlah_sub_konten'].values[0],
     delta_color="inverse")
 
 with col3:
@@ -92,5 +92,3 @@ container.write(selected_psak_data['konten'].values[0])
 
 with st.expander("File konten:"):
     st.write(f"{selected_psak_data['file_konten'].values[0]}")
-       
-st.write(f"Jumlah Sub Konten: {selected_psak_data['jumlah_sub_konten'].values[0]}")
