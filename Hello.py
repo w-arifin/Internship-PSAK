@@ -30,7 +30,7 @@ st.set_page_config(
 st.title("Prototype Dashboard PSAK")
 st.write("Data Preparation of PSAK || TETRIS BATCH 4 Internship in Xeratic - Group 19")
 
-df = pd.read_excel('https://github.com/w-arifin/Internship-PSAK/raw/main/Mockup%20Group%2019%20Xeratic.xlsx')
+df = pd.read_excel('https://github.com/w-arifin/Internship-PSAK/raw/main/Mockup%20Group%2019%20Xeratic%20(2).xlsx')
 df = df.rename(columns={'No PSAK' : 'no_psak',
                                'Nama PSAK' : 'nama_psak',
                                'Tgl Terbit' : 'tgl_terbit',
