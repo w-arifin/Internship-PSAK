@@ -66,11 +66,15 @@ with col1:
     "Pilih PSAK yang ingin dilihat:",
     (option_list))
 
+selected_psak_data = df[df['no_psak'] == option]
+
+with col2:
+   st.metric(label="Total Jumlah Sub Konten:", value=selected_psak_data['jumlah_sub_konten'].values[0],
+    delta_color="inverse")
+
 with col3:
    st.metric(label="Total Jumlah Sub Konten:", value=df['jumlah_sub_konten'].sum(),
     delta_color="inverse")
-
-selected_psak_data = df[df['no_psak'] == option]
 
 st.subheader(f"{option} - {selected_psak_data['nama_psak'].values[0]}")
 st.write(f"**Kategori** : *{selected_psak_data['kategori'].values[0]}*")
